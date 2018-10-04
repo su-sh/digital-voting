@@ -1,0 +1,107 @@
+namespace org.dv.net
+
+participant SystemAdmin identified by adminId {
+  o String adminId
+  o String firstName
+  o String lastName
+}
+
+participant User identified by userId{
+  o String userId
+  o PrimaryInfo primaryInfo
+  o String userPassword
+}
+
+concept PrimaryInfo {
+  o String firstName
+  o String lastName
+  o String dob
+  o String sex
+  o String citizenshipId
+  o String emailId 
+}
+
+participant ElectionAdmin identified by electionAdminId {
+  o String electionAdminId
+  o String organizationName
+  o String electionAdminPassword
+  -->User user
+}
+
+participant Voter identified by voterId{
+  o String voterId
+  o String votePasscode
+  o Boolean voted default=false
+  --> Election election
+  --> User user
+}
+
+asset Election identified by electionId{
+  o String electionId
+  o String electionDetail
+  o String electionRegisterTime
+  o String electionResultTime
+  o String[] candidateId optional
+  o String[] voterId optional
+  --> ElectionAdmin electionAdminId
+  o Boolean published default=false
+}
+
+participant Candidate identified by candidateId {
+  --> Election election
+  --> User user
+  o String candidateId
+  o String description
+  o Integer votes default=0
+}
+
+////////////////////////////////////////*Transactions*///////////////////////////////////////////  
+
+transaction RegisterUser{
+  o String citizenshipId
+  o String firstName
+  o String lastName
+  o String dob
+  o String sex
+  o String emailId 
+}
+
+
+transaction RegisterElectionAdmin{
+  --> User user
+  o String organizationName
+}
+
+transaction RegisterElection{
+  o String electionId
+  o String electionDetail
+  o String electionRegisterTime
+  o String electionResultTime
+  --> ElectionAdmin electionAdminId
+}
+
+
+transaction RegisterCandidate{
+  --> Election election
+  --> User user
+  o String candidateId
+  o String description
+}
+  
+  
+transaction DeleteCandidate{
+  --> Election election
+  --> Candidate candidate
+}
+  
+transaction RegisterVoter{
+  --> Election election
+  --> User user
+}
+  
+  
+transaction MakeVote {
+  --> Election election
+  --> Voter voter
+  --> Candidate candidate
+}
