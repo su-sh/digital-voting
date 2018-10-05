@@ -1,0 +1,174 @@
+admin@digital-voting-network
+main_exp.card
+
+
+
+
+
+-----------------------------------------------------------------------
+ADMIN
+check
+
+create user
+
+{
+  "$class": "org.dv.net.RegisterUser",
+  "citizenshipId": "123456",
+  "firstName": "Sushant",
+  "lastName": "Shrestha",
+  "dob": "201584",
+  "sex": "male",
+  "emailId": "s@g.com",
+  "timestamp": "2018-10-05T06:46:24.011Z"
+}
+
+export
+#IssueCard User
+{
+  "participant": "org.dv.net.User#"+userId,
+  "userID": "123456", 
+  "options": {}
+}
+//registerData.doctorId
+
+#import
+
+
+
+
+
+
+#electionAdmin Register
+
+{
+  "$class": "org.dv.net.RegisterElectionAdmin",
+  "user": "org.dv.net.User#123456",
+  "organizationName": "string",
+  "timestamp": "2018-10-05T08:00:53.663Z"
+}
+
+issue card
+{
+  "participant": "org.dv.net.ElectionAdmin#EA_123456",
+  "userID": "EA_123456",
+  "options": {}
+}
+
+import
+
+
+
+-----------------------------------------------------------------------
+
+ElectionAdmin
+
+
+#Register Election
+
+{
+  "$class": "org.dv.net.RegisterElection",
+  "electionId": "FirstElection",
+  "electionDetail": "FirstElection Detail",
+  "electionRegisterTime": "1",
+  "electionResultTime": "9",
+  "electionAdminId": "org.dv.net.ElectionAdmin#EA_123456",
+  "timestamp": "2018-10-05T08:00:53.646Z"
+}
+
+
+
+
+
+
+
+
+
+
+
+Check user
+if(!Exists)then create and issue
+
+
+
+
+
+#Candidate
+{
+  "$class": "org.dv.net.RegisterCandidate",
+  "election": "org.dv.net.Election#FirstElection_EA_123456",
+  "user": "org.dv.net.User#1",
+  "candidateId": "af",
+  "description": "string",
+  "timestamp": "2018-10-05T08:00:53.622Z"
+}
+
+
+#Voter
+{
+  "$class": "org.dv.net.RegisterVoter",
+  "election": "org.dv.net.Election#FirstElection_EA_123456",
+  "user": "org.dv.net.User#1",
+  "timestamp": "2018-10-05T10:41:57.290Z"
+}
+
+
+
+-------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+{
+  "participant": "org.dv.net.User#1",
+  "userID": "1", 
+  "options": {}
+}
+
+
+
+
+
+
+
+
+#makeVote
+{
+  "$class": "org.dv.net.MakeVote",
+  "election": "org.dv.net.Election#FirstElection_EA_123456",
+  "voter": "org.dv.net.Voter#1",
+  "candidate": "org.dv.net.Candidate#1",
+  "timestamp": "2018-10-05T10:41:57.141Z"
+}
+
+
+
+
+
+
+
+
+
+
+
+
+***********
+
+new ele
+{
+  "$class": "org.dv.net.RegisterElection",
+  "electionId": "123",
+  "electionDetail": "FirstElection Detail",
+  "electionRegisterTime": "1",
+  "electionResultTime": "9",
+  "electionAdminId": "org.dv.net.ElectionAdmin#EA_123456",
+  "transactionId": "e2fc79dcba0b46eb9da5dc0ca6851133d5159843d9d47e6438b2d02072606878",
+  "timestamp": "2018-10-05T08:00:53.646Z"
+}
+
+
+
+

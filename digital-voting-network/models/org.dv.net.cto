@@ -84,22 +84,16 @@ transaction RegisterElection{
 transaction RegisterCandidate{
   --> Election election
   --> User user
-  o String candidateId
   o String description
 }
   
-  
-transaction DeleteCandidate{
-  --> Election election
-  --> Candidate candidate
-}
+
   
 transaction RegisterVoter{
   --> Election election
   --> User user
 }
-  
-  
+
 transaction MakeVote {
   --> Election election
   --> Voter voter

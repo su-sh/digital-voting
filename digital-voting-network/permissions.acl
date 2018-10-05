@@ -1,0 +1,191 @@
+rule AllAccess {
+     description: "AllAccess - grant everything to everybody."
+     participant: "org.hyperledger.composer.system.Participant"
+     operation: ALL
+     resource: "org.hyperledger.composer.system.**"
+     action: ALLOW
+}
+
+rule AdminRegisterUser {
+     description: "AllAccess - grant everything to everybody."
+     participant: "org.hyperledger.composer.system.NetworkAdmin"
+     operation: ALL
+     resource: "org.dv.net.**"
+     action: ALLOW
+}
+
+rule AdminRegisterElectionAdmin {
+     description: "AllAccess - grant everything to everybody."
+     participant: "org.hyperledger.composer.system.NetworkAdmin"
+     operation: ALL
+     resource: "org.dv.net.RegisterElectionAdmin"
+     action: ALLOW
+}
+
+// ELECTION ADMIN
+//CardNeeded ElectionAdmin
+
+rule CreateElection {
+    description: "Allow election admin to create new election"
+    participant: "org.dv.net.ElectionAdmin"
+    operation: CREATE
+    resource: "org.dv.net.RegisterElection"
+    action: ALLOW
+}
+
+rule AdminCreateElection {
+    description: "Allow election admin to add candidate to election"
+    participant: "org.dv.net.ElectionAdmin"
+    operation: CREATE
+    resource: "org.dv.net.Election"
+    action: ALLOW
+}
+
+
+rule ElectionAdminRegisterUser {
+     description: "AllAccess - grant everything to everybody."
+     participant: "org.dv.net.ElectionAdmin"
+     operation: ALL
+     resource: "org.dv.net.RegisterUser"
+     action: ALLOW
+}
+
+rule ElectionAdminCreateUser {
+     description: "AllAccess - grant everything to everybody."
+     participant: "org.dv.net.ElectionAdmin"
+     operation: CREATE,READ
+     resource: "org.dv.net.User"
+     action: ALLOW
+}
+
+rule ElectionAdminCreateVoter {
+     description: "AllAccess - grant everything to everybody."
+     participant: "org.dv.net.ElectionAdmin"
+     operation: CREATE
+     resource: "org.dv.net.Voter"
+     action: ALLOW
+}
+
+
+rule ElectionAdminCreateCandidate {
+     description: "AllAccess - grant everything to everybody."
+     participant: "org.dv.net.ElectionAdmin"
+     operation: CREATE
+     resource: "org.dv.net.Candidate"
+     action: ALLOW
+}
+
+
+
+
+rule RegisterCandidate {
+    description: "Allow election admin to add candidate to election"
+    participant: "org.dv.net.ElectionAdmin"
+    operation: CREATE
+    resource: "org.dv.net.RegisterCandidate"
+    action: ALLOW
+}
+
+rule RegisterVoter {
+    description: "Allow election admin to add candidate to election"
+    participant: "org.dv.net.ElectionAdmin"
+    operation: CREATE
+    resource: "org.dv.net.RegisterVoter"
+    action: ALLOW
+}
+
+rule AdminViewElectionList{
+    description: "Allow voters to cast vote"
+    participant(p): "org.dv.net.ElectionAdmin"
+    operation: ALL
+    resource(r): "org.dv.net.Election"
+    condition: (p.electionAdminId==r.electionAdminId.getIdentifier())
+    action: ALLOW
+}
+
+
+rule AdminViewVoterList{
+    description: "Allow voters to cast vote"
+    participant(p): "org.dv.net.ElectionAdmin"
+    operation: ALL
+    resource(r): "org.dv.net.Voter"
+    condition: (p.electionAdminId==r.election.electionAdminId.getIdentifier())
+    action: ALLOW
+}
+
+rule AdminViewCandidateList{
+    description: "Allow voters to cast vote"
+    participant(p): "org.dv.net.ElectionAdmin"
+    operation: ALL
+    resource(r): "org.dv.net.Candidate"
+    condition: (p.electionAdminId==r.election.electionAdminId.getIdentifier())
+    action: ALLOW
+}
+
+
+
+
+
+//USER-Voter
+
+rule VotersMakeVote{
+    description: "Allow voters to view election list"
+    participant(p): "org.dv.net.User"
+    operation: ALL
+    resource(r): "org.dv.net.MakeVote"
+    condition: (r.election.voterId && r.election.voterId.indexOf(p.getIdentifier()) > -1 )
+    action: ALLOW
+}
+
+
+rule VotersCreateVote{
+    description: "Allow Voters to update/create "
+    participant(p): "org.dv.net.User"
+    operation: UPDATE 
+    resource(r): "org.dv.net.Candidate"
+    condition: (r.election.voterId && r.election.voterId.indexOf(p.getIdentifier()) > -1 )
+    action: ALLOW
+}
+
+
+
+rule VotersViewElectionList{
+    description: "Allow VotersViewElectionList "
+    participant(p): "org.dv.net.User"
+    operation: READ
+    resource(r): "org.dv.net.Election"
+    condition: (r.voterId && r.voterId.indexOf(p.getIdentifier()) > -1 )
+    action: ALLOW
+}
+
+rule VotersViewUpdateVoter{
+    description: "Allow VotersView who themself as voter "
+    participant(p): "org.dv.net.User"
+    operation: READ,UPDATE
+    resource(r): "org.dv.net.Voter"
+    condition: (r.user.userId==p.getIdentifier() )
+    action: ALLOW
+}
+
+  
+
+rule ViewVotersCandidateList{
+    description: "Allow ViewVotersCandidateList"
+    participant(p): "org.dv.net.User"
+    operation: ALL
+    resource(r): "org.dv.net.Candidate"
+    condition: (r.election.voterId && r.election.voterId.indexOf(p.getIdentifier()) > -1 )
+    action: ALLOW
+}
+
+
+
+rule UserViewThemself{
+    description: "Allow ViewVotersCandidateList"
+    participant(p): "org.dv.net.User"
+    operation: ALL
+    resource(r): "org.dv.net.User"
+    condition: (r.userId==p.getIdentifier())
+    action: ALLOW
+}
+

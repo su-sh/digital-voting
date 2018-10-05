@@ -112,7 +112,7 @@ async function RegisterElection(registerElection) {
  */
 async function RegisterVoter(registerVoter) {
    
-    var voterId =  registerVoter.user.userId;
+    var voterId =  registerVoter.user.userId+"_"+registerVoter.election.electionId;
     var votePasscode = generateCode();
 
     const factory = getFactory();
@@ -147,7 +147,7 @@ async function RegisterVoter(registerVoter) {
 
         voterIdArray = registerVoter.election.voterId;
 
-        voterIdArray.push(voterId);
+        voterIdArray.push(registerVoter.user.userId);
         registerVoter.election.voterId = voterIdArray;
         let assetRegistry = await getAssetRegistry(NS + '.Election');
         await assetRegistry.update(registerVoter.election);
@@ -159,9 +159,6 @@ async function RegisterVoter(registerVoter) {
 
 
 
-
-
-
 /**
  * Creating & Registering RegisterCandidate to network
  * @param {org.dv.net.RegisterCandidate} registerCandidate - Registering Candidate
@@ -169,7 +166,6 @@ async function RegisterVoter(registerVoter) {
  */
 async function RegisterCandidate(registerCandidate) {
     /*
-    
     asset Candidate identified by candidateId {
      --> Election election
      --> User user
@@ -177,17 +173,14 @@ async function RegisterCandidate(registerCandidate) {
      o String description
      o Integer votes default=0
     
-    
-    transaction:
+    xtransaction:
       --> Election election
      --> User user
      o String candidateId
      o String description
-    
-    
-    */
+     */
 
-    var candidateId = registerCandidate.user.userId;
+    var candidateId = registerCandidate.user.userId+"_"+registerCandidate.election.electionId;
 
     const factory = getFactory();
     const NS = 'org.dv.net';
@@ -202,12 +195,10 @@ async function RegisterCandidate(registerCandidate) {
         } else {
             res = false;
         }
-
     });
 
-
     if (res) {
-
+      
         const candidate = factory.newResource(NS, 'Candidate', candidateId);
         candidate.election = factory.newRelationship(NS, 'Election', registerCandidate.election.electionId);
         candidate.user = factory.newRelationship(NS, 'User', registerCandidate.user.userId);
@@ -220,7 +211,7 @@ async function RegisterCandidate(registerCandidate) {
 
         candidateIdArray = registerCandidate.election.candidateId;
 
-        candidateIdArray.push(candidateId);
+        candidateIdArray.push(registerCandidate.user.userId);
         registerCandidate.election.candidateId = candidateIdArray;
         let assetRegistry = await getAssetRegistry(NS + '.Election');
         await assetRegistry.update(registerCandidate.election);
@@ -245,15 +236,12 @@ async function RegisterCandidate(registerCandidate) {
  * @transaction
  */
 async function MakeVote(makeVote) {
-
     /*
       --> Election election
       --> Voter voter
       --> Candidate candidate
     */
-
-
-
+  
     var voter = makeVote.voter;
     // get candidate
     var candidate = makeVote.candidate;
@@ -267,17 +255,11 @@ async function MakeVote(makeVote) {
         const factory = getFactory();
         const NS = 'org.dv.net';
 
-
         let candidateRegistry = await getParticipantRegistry(NS + '.Candidate');
         await candidateRegistry.update(candidate);
         let voterRegistry = await getParticipantRegistry(NS + '.Voter');
         await voterRegistry.update(voter);
-
-
     }
-
-
-
 }
 
 

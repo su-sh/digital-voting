@@ -1,3 +1,9 @@
+query selectElection {
+  description: "Select alle election for particular user"
+  statement:
+      SELECT org.dv.net.Election
+}
+
 query selectElectionCandidates {
   description: "Select all Candidates for particular election"
   statement:
@@ -5,6 +11,12 @@ query selectElectionCandidates {
           WHERE (election==_$election)
 }
 
+query selectElectionVoters {
+  description: "Select all Voters for particular election"
+  statement:
+      SELECT org.dv.net.Voter
+          WHERE (election==_$election)
+}
 
 query selectElectionListOfParticularUser {
   description: "Select election list Of particular user"
@@ -12,6 +24,3 @@ query selectElectionListOfParticularUser {
       SELECT org.dv.net.Election
           WHERE (voterId CONTAINS _$voterId)
 }
-
-
-
